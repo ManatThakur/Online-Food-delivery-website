@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <div class="min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white shadow-xl rounded-2xl w-full max-w-5xl grid md:grid-cols-3 overflow-hidden">
+
+      <!-- Left: Payment Form -->
+      <div class="md:col-span-2 p-8">
+
+        <!-- Progress -->
+        <div class="flex items-center justify-between mb-8">
+          <div class="text-sm font-semibold text-blue-600">Step 2 of 3</div>
+          <div class="w-full mx-4 h-2 bg-gray-200 rounded">
+            <div class="h-2 bg-blue-600 rounded w-2/3"></div>
+          </div>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-6">Payment Details</h2>
+
+        <form action="/payment" method="POST" class="space-y-4">
+          <!-- Card Info -->
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">Card Number</label>
+              <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456"
+                class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none" required>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1">Expiry</label>
+                <input type="text" name="expiry" placeholder="MM/YY"
+                  class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none" required>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-1">CVV</label>
+                <input type="password" name="cvv" placeholder="123"
+                  class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none" required>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Name on Card</label>
+              <input type="text" name="nameOnCard" placeholder="John Doe"
+                class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none" required>
+            </div>
+          </div>
+
+          <!-- Billing -->
+          <h3 class="text-lg font-semibold mt-8 mb-4">Billing Address</h3>
+
+          <div class="space-y-4">
+            <input type="text" name="address" placeholder="Address"
+              class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+            <div class="grid grid-cols-2 gap-4">
+              <input type="text" name="city" placeholder="City"
+                class="border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+              <input type="text" name="zip" placeholder="ZIP Code"
+                class="border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none" required>
+            </div>
+          </div>
+
+          <!-- Button -->
+          <button type="submit" class="w-full mt-8 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+            Pay Now
+          </button>
+        </form>
+
+      </div>
+
+      <!-- Right: Summary -->
+      <div class="bg-gray-50 p-8 border-l">
+
+        <h3 class="text-lg font-semibold mb-6">Order Summary</h3>
+
+        <div class="space-y-4 text-sm">
+          <div class="flex justify-between">
+            <span>Total Price</span>
+            <span>Rs <%= total %></span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Shipping</span>
+            <span>Rs <%= shipping %></span>
+          </div>
+
+          <div class="border-t pt-4 flex justify-between font-bold text-lg">
+            <span>Total Bill</span>
+            <span>Rs <%= totalBill %></span>
+          </div>
+        </div>
+
+        <div class="mt-6 text-xs text-gray-500">
+          🔒 Secure payment powered by SSL encryption
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

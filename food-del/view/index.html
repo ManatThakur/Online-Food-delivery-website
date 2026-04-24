@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Delivery</title>
+  <link rel="stylesheet" href="/output.css">
+</head>
+
+<body class="bg-gray-100 ">
+
+<!-- Navbar -->
+<nav class="bg-red-500 text-white p-4 flex justify-between">
+  <h1 class="text-2xl font-bold">FoodExpress</h1>
+  <div>
+    <a href="#" class="mr-4">Home</a>
+    <a href="/cart" class="mr-4">Cart</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="text-center p-10 bg-white">
+  <h2 class="text-4xl font-bold mb-4">
+    Delicious Food Delivered Fast
+  </h2>
+  <p class="mb-4">
+    Order your favourite food online
+  </p>
+  <button onclick="orderNow()"
+    class="bg-red-500 text-white px-6 py-2 rounded">
+    Order Now
+  </button>
+</section>
+
+<!-- Food Items -->
+<section class="p-10 grid grid-cols-3 gap-6 ">
+
+  <!-- Pizza -->
+  <div class="bg-white p-4 shadow rounded hover:shadow-lg transition">
+    <img class="w-full h-40 object-cover"
+      src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092">
+    <h3 class="text-xl font-bold mt-2">Pizza</h3>
+    <button onclick="addItem('Pizza', 120, 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092', 'Classic pizza with tomato sauce, mozzarella cheese, and your choice of toppings.')"
+      class="bg-green-500 text-white px-3 py-1 mt-2">
+      Add
+    </button>
+    <h3 id= '3'class="text-lg font-semibold">Price : Rs 120</h3>
+  </div>
+
+  <!-- Burger -->
+  <div class="bg-white p-4 shadow rounded hover:shadow-lg transition">
+    <img class="w-full h-40 object-cover"
+      src="https://images.unsplash.com/photo-1550547660-d9450f859349">
+    <h3 value="Burger" class="text-xl font-bold mt-2">Burger</h3>
+    <button onclick="addItem('Burger', 100, 'https://images.unsplash.com/photo-1550547660-d9450f859349', 'Juicy burger with fresh lettuce, tomato, and cheese.')"
+      class="bg-green-500 text-white px-3 py-1 mt-2">
+      Add
+    </button>
+    <h3 id="5" value = "100" class="text-lg font-semibold">Price : Rs 100</h3>
+  </div>
+
+  <!-- Pasta -->
+  <div class="bg-white p-4 shadow rounded hover:shadow-lg transition">
+    <img class="w-full h-40 object-cover"
+      src="https://cdn.pixabay.com/photo/2022/09/24/07/31/pasta-7475756_1280.jpg">
+    <h3  value="Pasta" class="text-xl font-bold mt-2">Pasta</h3>
+
+    <button onclick="addItem('Pasta', 150, 'https://cdn.pixabay.com/photo/2022/09/24/07/31/pasta-7475756_1280.jpg' , 'Delicious pasta with rich tomato sauce and fresh herbs.')"
+      class="bg-green-500 text-white px-3 py-1 mt-2">
+      Add
+  </button>
+  <h3 id ='6' value = "150" class="text-lg font-semibold">Price : Rs 150</h3>
+  </div>
+
+  <!-- Momos -->
+  <div class="bg-white p-4 shadow rounded hover:shadow-lg transition">
+    <img class="w-full h-40 object-cover"
+      src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+    <h3  value="Momos" class="text-xl font-bold mt-2">Momos</h3>
+    <button onclick="addItem('Momos', 170, 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d', 'Steamed momos filled with a savory mixture of vegetables and spices.')"
+      class="bg-green-500 text-white px-3 py-1 mt-2">
+      Add
+    </button>
+    <h3 id="9" value = "170" class="text-lg font-semibold">Price : Rs 170</h3>
+  </div>
+
+  <!-- Fries -->
+  <div class="bg-white p-4 shadow rounded hover:shadow-lg transition">
+    <img class="w-full h-40 object-cover"
+      src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877">
+    <h3  value="Fries" class="text-xl font-bold mt-2">Fries</h3>
+    <button onclick="addItem('Fries', 180, 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877', 'Crispy golden fries seasoned with salt and served with ketchup.')"
+      class="bg-green-500 text-white px-3 py-1 mt-2">
+      Add
+    </button>
+    <h3   id = '2'value = "180" class="text-lg font-semibold">Price : Rs 180</h3>
+  </div>
+
+  <!-- Ice Cream -->
+  <div class="bg-white p-4 shadow rounded hover:shadow-lg transition">
+    <img class="w-full h-40 object-cover"
+      src="https://images.unsplash.com/photo-1501443762994-82bd5dace89a">
+    <h3  id='1'value="Ice Cream" class="text-xl font-bold mt-2">Ice Cream</h3>
+    <button onclick="addItem('Ice Cream', 50, 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a', 'Creamy ice cream in a variety of flavors, perfect for dessert.')"
+      class="bg-green-500 text-white px-3 py-1 mt-2">
+      Add
+    </button><h3  value = "50" class="text-lg font-semibold">Price : Rs 50</h3>
+  </div>
+
+</section>
+
+<footer class="bg-red-500 text-white text-center p-4">
+  Food Delivery Project
+</footer>
+
+<script>
+  function orderNow() {
+    alert('Order placed successfully!');
+  }
+
+  async function addItem(foodName, price, image, description) {
+    try {
+      const response = await fetch('/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ foodName, price, image, description })
+      });
+      if (response) {
+        window.location.href = '/cart';
+      } else {
+        alert('Failed to add item');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error adding item');
+    }
+  }
+</script>
+
+</body>
+</html>

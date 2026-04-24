@@ -1,0 +1,15 @@
+const express = require('express');
+const homeController = require('../controller/homeController');
+const path = require('path');
+const rootdir = require('../util/path');
+
+const homeRouter = express.Router();
+homeRouter.get('/', homeController.getHome);
+homeRouter.post('/cart', homeController.showCart);
+homeRouter.get('/cart', homeController.showCart);
+homeRouter.post('/removeItem/:id', homeController.removeFromCart);
+homeRouter.get('/details', homeController.showDetails);
+homeRouter.post('/order', homeController.orderNow);
+homeRouter.get('/payment', homeController.paymentPage);
+homeRouter.post('/payment', homeController.processPayment);
+module.exports = homeRouter;

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+<div class="max-w-3xl mx-auto mt-10 bg-white p-6 rounded shadow">
+
+    <!-- Image -->
+    <img 
+        src="<%= item.image %>" 
+        class="w-full h-64 object-cover rounded"
+    >
+
+    <!-- Name -->
+    <h1 class="text-3xl font-bold mt-4">
+        <%= item.foodName %>
+    </h1>
+
+    <!-- Description -->
+    <p class="mt-2 text-gray-600">
+        <%= item.description %>
+    </p>
+
+    <!-- Price -->
+    <p class="mt-2 text-xl font-bold">
+        Price: ₹<%= item.price %>
+    </p>
+
+
+    <!-- Quantity + Add to cart -->
+    <form action="/order" method="POST" class="mt-4">
+
+        <input type="hidden" 
+               name="foodName" 
+               value="<%= item.foodName %>">
+
+        <input type="hidden" 
+               name="price" 
+               value="<%= item.price %>">
+
+        <input type="hidden" 
+               name="image" 
+               value="<%= item.image %>">
+
+        <input type="hidden" 
+               name="description" 
+               value="<%= item.description %>">
+
+        <label class="block font-bold">
+            <input type="hidden" name="qty" value="<%= item.qty || 1 %>" min="1" class="border p-2 w-20">
+            Quantity
+        </label>
+
+        <input 
+            type="number"
+            name="qty"
+            value="<%= item.qty %>"
+            min=""
+            class="border p-2 w-20"
+        >
+
+        <br><br>
+
+        <button 
+            class="bg-green-500 text-white px-4 py-2 rounded"
+        >
+            ORDER
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
