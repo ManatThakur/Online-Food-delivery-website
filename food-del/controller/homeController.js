@@ -6,7 +6,7 @@ const { connectDB, getDB } = require('../mongodb/connection');
 
 const {check,validationResult} = require('express-validator');
 
-
+const { insertUser } = require('../mongodb/user');
 
 const FullNameValidator= check('name')
 .notEmpty().withMessage('Full name is required')
@@ -160,11 +160,18 @@ exports.showSignup = (req, res) => {
 exports.postSignUp=[
   
   FullNameValidator,
-   (req, res) => {
+   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render("signup", { errors: errors.array() });
+      return res.status(400).render("signup", { errors: errors.array(), oldInput: req.body });
     }
-    res.sendFile(path.join(rootdir, 'view', 'index.html'));
+    const {name,email,password} = req.body;
+    try {
+      await insertUser({ name, email, password });
+      res.sendFile(path.join(rootdir, 'view', 'index.html'));
+    } catch (error) {
+      console.error('Error saving user:', error);
+      res.status(500).send('Registration failed');
+    }
 }
 ]
