@@ -4,6 +4,16 @@ const { ObjectId } = require('mongodb');
 const rootdir = require('../util/path');
 const { connectDB, getDB } = require('../mongodb/connection');
 
+const {check,validationResult} = require('express-validator');
+
+
+
+const FullNameValidator= check('name')
+.notEmpty().withMessage('Full name is required')
+.trim()
+.isLength({ min: 3 }).withMessage('Full name must be at least 3 characters long')
+.matches(/^[a-zA-Z\s]+$/).withMessage('Full name must contain only letters and spaces')
+;
 // Initialize database connection
 let db;
 connectDB().then(database => {
@@ -102,9 +112,7 @@ exports.orderNow = (req, res) => {
 
         orders.push(item);
 
-        fs.writeFile(
-            path.join(rootdir, 'data', 'orders.json'),
-            JSON.stringify(orders),
+        fs.writeFile(path.join(rootdir, 'data', 'orders.json'), JSON.stringify(orders),
             (err) => {
                 if (err) {
                     console.error('Error writing orders data:', err);
@@ -142,3 +150,21 @@ exports.processPayment = async (req, res) => {
     res.status(500).send('Error processing payment');
   }
 };
+
+exports.showAuth = (req, res) => {
+    res.render("auth");
+}
+exports.showSignup = (req, res) => {
+    res.render("signup");
+}
+exports.postSignUp=[
+  
+  FullNameValidator,
+   (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("signup", { errors: errors.array() });
+    }
+    res.sendFile(path.join(rootdir, 'view', 'index.html'));
+}
+]
