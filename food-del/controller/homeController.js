@@ -5,15 +5,25 @@ const rootdir = require('../util/path');
 const { connectDB, getDB } = require('../mongodb/connection');
 
 const {check,validationResult} = require('express-validator');
-
-const { insertUser } = require('../mongodb/user');
-
+const { insertUser, findUserByEmail } = require('../mongodb/user');
+const bcrypt=require('bcryptjs');
 const FullNameValidator= check('name')
 .notEmpty().withMessage('Full name is required')
 .trim()
 .isLength({ min: 3 }).withMessage('Full name must be at least 3 characters long')
 .matches(/^[a-zA-Z\s]+$/).withMessage('Full name must contain only letters and spaces')
 ;
+
+const ConfirmPasswordValidator=check('confirmPassword')
+.notEmpty().withMessage('Confirm password is required')
+.trim()
+.custom((value,{req})=>{
+  if(value!==req.body.password){
+    throw new Error('Passwords do not match');
+  }
+  return true;
+});
+
 // Initialize database connection
 let db;
 connectDB().then(database => {
@@ -157,21 +167,41 @@ exports.showAuth = (req, res) => {
 exports.showSignup = (req, res) => {
     res.render("signup");
 }
-exports.postSignUp=[
-  
+exports.postSignUp = [
   FullNameValidator,
-   async (req, res) => {
+  ConfirmPasswordValidator,
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).render("signup", { errors: errors.array(), oldInput: req.body });
     }
-    const {name,email,password} = req.body;
+    const {name, email, password} = req.body;
+    
     try {
-      await insertUser({ name, email, password });
-      res.sendFile(path.join(rootdir, 'view', 'index.html'));
+      const hashPass = bcrypt.hashSync(password, 12);
+      await insertUser({ name, email, password: hashPass });
+      return res.sendFile(path.join(rootdir, 'view', 'index.html'));
     } catch (error) {
       console.error('Error saving user:', error);
       res.status(500).send('Registration failed');
     }
-}
+  }
 ]
+exports.postAuth=async(req,res)=>{
+  const {email,password}=req.body;
+  try {
+    const user = await findUserByEmail(email);
+    if (!user) {
+      return res.status(400).render("auth", { errors: [{ msg: 'Invalid email or password' }] });
+    }
+    const isMatch = bcrypt.compareSync(password, user.password);
+    if (!isMatch) {
+      return res.status(400).render("auth", { errors: [{ msg: 'Invalid email or password' }] });
+    }
+    res.sendFile(path.join(rootdir, 'view', 'index.html'));
+  }
+  catch (error) {
+    console.error('Error during authentication:', error);
+    return res.status(500).render("auth", { errors: [{ msg: 'An error occurred during authentication' }] });
+  }
+};

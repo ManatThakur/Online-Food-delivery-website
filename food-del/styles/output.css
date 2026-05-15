@@ -205,6 +205,9 @@
   }
 }
 @layer utilities {
+  .relative {
+    position: relative;
+  }
   .start {
     inset-inline-start: var(--spacing);
   }
@@ -577,6 +580,11 @@
     &:focus {
       --tw-outline-style: none;
       outline-style: none;
+    }
+  }
+  .sm\:inline {
+    @media (width >= 40rem) {
+      display: inline;
     }
   }
   .md\:col-span-2 {

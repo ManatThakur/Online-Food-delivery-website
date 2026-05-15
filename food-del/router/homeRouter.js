@@ -13,6 +13,7 @@ homeRouter.post('/order', homeController.orderNow);
 homeRouter.get('/payment', homeController.paymentPage);
 homeRouter.post('/payment', homeController.processPayment);
 homeRouter.get('/auth', homeController.showAuth);
+homeRouter.post('/auth', homeController.postAuth);
 homeRouter.get('/signup', homeController.showSignup);
 homeRouter.post('/signup', homeController.postSignUp);
 module.exports = homeRouter;
