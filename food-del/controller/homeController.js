@@ -4,6 +4,27 @@ const { ObjectId } = require('mongodb');
 const rootdir = require('../util/path');
 const { connectDB, getDB } = require('../mongodb/connection');
 
+const sendGrid = require('@sendgrid/mail');
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+const SENDGRID_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || 'manatthakur7@gmail.com';
+const sendGridReady = Boolean(SENDGRID_API_KEY && SENDGRID_FROM_EMAIL);
+if (!SENDGRID_API_KEY) {
+  console.error('SENDGRID_API_KEY is not set. Email sending will fail until you set it in environment variables.');
+}
+if (!SENDGRID_FROM_EMAIL) {
+  console.error('SENDGRID_FROM_EMAIL is not set. Set it to a verified SendGrid sender address.');
+}
+if (sendGridReady) {
+  sendGrid.setApiKey(SENDGRID_API_KEY);
+}
+const WelcomeEmailTemplate = (name, email) => {
+  return {
+    to: email,
+    from: SENDGRID_FROM_EMAIL,
+    subject: 'Welcome to Our App',
+    html: `<p>Hello ${name},</p><p>Welcome to our app!</p>`
+  };
+};
 const {check,validationResult} = require('express-validator');
 const { insertUser, findUserByEmail } = require('../mongodb/user');
 const bcrypt=require('bcryptjs');
@@ -180,10 +201,20 @@ exports.postSignUp = [
     try {
       const hashPass = bcrypt.hashSync(password, 12);
       await insertUser({ name, email, password: hashPass });
+      if (sendGridReady) {
+        console.log('Attempting to send welcome email to:', email);
+        const response = await sendGrid.send(WelcomeEmailTemplate(name, email));
+        console.log('SendGrid send response:', response);
+      } else {
+        console.warn('Skipping welcome email because SendGrid is not configured correctly.');
+      }
       return res.sendFile(path.join(rootdir, 'view', 'index.html'));
     } catch (error) {
-      console.error('Error saving user:', error);
-      res.status(500).send('Registration failed');
+      console.error('Error saving user or sending email:', error);
+      if (error.response && error.response.body) {
+        console.error('SendGrid error body:', error.response.body);
+      }
+      res.status(500).send('Registration failed. Check server logs for SendGrid error details.');
     }
   }
 ]
