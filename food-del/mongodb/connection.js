@@ -1,11 +1,11 @@
 const { MongoClient } = require('mongodb');
 
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const url = process.env.MONGO_URI || 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 
 // Database Name
-const dbName = 'FOOD_ITEMS';
+const dbName = process.env.DB_NAME || 'FOOD_ITEMS';
 
 let db;
 

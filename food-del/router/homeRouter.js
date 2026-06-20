@@ -4,7 +4,7 @@ const path = require('path');
 const rootdir = require('../util/path');
 
 const homeRouter = express.Router();
-homeRouter.get('/', homeController.showSignup);
+homeRouter.get('/', homeController.getHome);
 homeRouter.post('/cart', homeController.showCart);
 homeRouter.get('/cart', homeController.showCart);
 homeRouter.post('/removeItem/:id', homeController.removeFromCart);

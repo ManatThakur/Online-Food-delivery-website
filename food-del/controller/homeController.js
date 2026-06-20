@@ -201,14 +201,8 @@ exports.postSignUp = [
     try {
       const hashPass = bcrypt.hashSync(password, 12);
       await insertUser({ name, email, password: hashPass });
-      if (sendGridReady) {
-        console.log('Attempting to send welcome email to:', email);
-        const response = await sendGrid.send(WelcomeEmailTemplate(name, email));
-        console.log('SendGrid send response:', response);
-      } else {
-        console.warn('Skipping welcome email because SendGrid is not configured correctly.');
-      }
-      return res.sendFile(path.join(rootdir, 'view', 'index.html'));
+      
+      return res.redirect('/');
     } catch (error) {
       console.error('Error saving user or sending email:', error);
       if (error.response && error.response.body) {
@@ -229,7 +223,7 @@ exports.postAuth=async(req,res)=>{
     if (!isMatch) {
       return res.status(400).render("auth", { errors: [{ msg: 'Invalid email or password' }] });
     }
-    res.sendFile(path.join(rootdir, 'view', 'index.html'));
+    res.redirect('/');
   }
   catch (error) {
     console.error('Error during authentication:', error);

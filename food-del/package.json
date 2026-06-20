@@ -10,12 +10,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-css": "npx @tailwindcss/cli -i ./styles/input.css -o ./styles/output.css",
     "watch-css": "npx @tailwindcss/cli -i ./styles/input.css -o ./styles/output.css --watch",
-    "start": "concurrently \"npm run watch-css\" \"nodemon app.js\""
+    "postinstall": "npm run build-css",
+    "dev": "concurrently \"npm run watch-css\" \"nodemon app.js\"",
+    "start": "node app.js"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.27",
     "concurrently": "^9.2.1",
-    "ejs": "^3.1.10",
     "nodemon": "^3.1.14",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.1"
@@ -25,6 +26,7 @@
     "@tailwindcss/cli": "^4.2.1",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
+    "ejs": "^3.1.10",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",
     "mongodb": "^7.2.0"
