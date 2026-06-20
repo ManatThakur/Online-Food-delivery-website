@@ -12,7 +12,8 @@
     "watch-css": "npx @tailwindcss/cli -i ./styles/input.css -o ./styles/output.css --watch",
     "postinstall": "npm run build-css",
     "dev": "concurrently \"npm run watch-css\" \"nodemon app.js\"",
-    "start": "node app.js"
+      "build": "npm run build-css",
+      "start": "concurrently \"npm run watch-css\" \"nodemon app.js\""
   },
   "devDependencies": {
     "autoprefixer": "^10.4.27",
